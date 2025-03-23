@@ -22,27 +22,6 @@ body {
     width: 400px;
 }
 
-/* Estilos para las hojas */
-.leaf {
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    background: url('hoja.png') no-repeat center center/contain;
-    opacity: 0.8;
-    animation: moveLeaves linear infinite;
-}
-
-/* Animación de las hojas cayendo */
-@keyframes moveLeaves {
-    0% {
-        transform: translateY(-10%) translateX(0) rotate(0deg);
-        opacity: 1;
-    }
-    100% {
-        transform: translateY(100vh) translateX(30px) rotate(360deg);
-        opacity: 0;
-    }
-}
 
 /* Estilos del botón */
 button {
