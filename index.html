@@ -7,13 +7,6 @@
     <link rel="stylesheet" href="estilo.css">
 </head>
 <body>
-    <!-- Video de fondo -->
-    <video autoplay loop muted id="background-video">
-        <source src="img/bosque.mp4" type="video/mp4">
-        Tu navegador no soporta videos de fondo.
-    </video>
-
-    <!-- Contenido principal -->
     <div class="container">
         <h1>Escape Room: La Mansión</h1>
         <p>Bienvenido al Escape Room.</p>
@@ -25,11 +18,12 @@
 
     <script>
         function createLeaves() {
-            for (let i = 0; i < 5; i++) { // Menos hojas para que no sobrecargue la pantalla
+            for (let i = 0; i < 5; i++) { // Reducir el número de hojas para mejor rendimiento
                 let leaf = document.createElement("div");
                 leaf.classList.add("leaf");
                 leaf.style.left = Math.random() * window.innerWidth + "px";
                 leaf.style.animationDuration = (Math.random() * 5 + 5) + "s"; // Velocidad aleatoria
+                leaf.style.animationDelay = Math.random() * 2 + "s"; // Retraso aleatorio
                 document.body.appendChild(leaf);
 
                 setTimeout(() => {
