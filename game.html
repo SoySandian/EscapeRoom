@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escape Room - Historia Interactiva</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Escape Room: Historia Interactiva</h1>
+        <p id="story">
+            Estás en una mansión rodeada de personas. A lo lejos, un hombre con antifaz te hace una señal para seguirlo. 
+            Antes de llegar, otra persona con antifaz te detiene y te pide que la acompañes al jardín.
+        </p>
+        <div class="choices">
+            <button onclick="chooseOption('habitacion')">Seguir al primer hombre</button>
+            <button onclick="chooseOption('jardin')">Seguir a la persona</button>
+        </div>
+        <p id="timer"></p>
+    </div>
+
+    <script>
+        let timer;
+        let currentPath = ""; // Variable para almacenar el camino actual
+
+        function startTimer() {
+            let timerElement = document.getElementById("timer");
+            timerElement.innerText = "Tiempo restante: 25 segundos";
+            let timeLeft = 25;
+
+            timer = setInterval(() => {
+                timeLeft--;
+                timerElement.innerText = `Tiempo restante: ${timeLeft} segundos`;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    timerElement.innerText = "Tiempo agotado. No elegiste a nadie.";
+                    if (currentPath === "solo") {
+                        chooseOption("ningunodos"); // Redirigir a disparar o no
+                    } else if (currentPath === "juntos") {
+                        chooseOption("ninguno"); // Redirigir a confiar o no
+                    }
+                }
+            }, 1000);
+        }
+
+        function chooseOption(option) {
+            clearTimeout(timer); 
+            clearInterval(timer); 
+            document.getElementById("timer").innerText = ""; 
+
+            let story = document.getElementById("story");
+            let choices = document.querySelector(".choices");
+            choices.innerHTML = "";
+
+            // Cambiar fondo dinámicamente
+            document.body.className = option;
+
+            if (option === "habitacion") {
+                story.innerText = "Sigues al primer hombre y descubres que es Damian Fox. Te advierte que deben salir de allí pues estaban rodeados de novenos y a la media noche empezaría la cacería. Deben llegar a la azotea donde Aegan los espera para salir.";
+                choices.innerHTML = '<button onclick="chooseOption(\'elevador\')">Tomar el elevador</button>';
+            } else if (option === "jardin") {
+                story.innerText = "Sigues a la persona y descubres que es Tatiana Cross. Te advierte que deben salir de allí pues estaban rodeados de novenos y a la media noche empezaría la cacería. Deben llegar a la azotea donde Aleixandre los espera para salir.";
+                choices.innerHTML = '<button onclick="chooseOption(\'elevador\')">Tomar el elevador</button>';
+            } else if (option === "elevador") {
+                story.innerText = "En el segundo piso, una Novena se interesa por tu acompañante. Te lanza una mirada para que sigas la corriente y no levantes sospechas. ¿Lo dejas ir?";
+                choices.innerHTML = '<button onclick="chooseOption(\'solo\')">Dejarlo ir</button>' +
+                                   '<button onclick="chooseOption(\'juntos\')">Seguir juntos</button>';
+            } else if (option === "solo") {
+                currentPath = "solo"; // Establecer el camino actual
+                story.innerText = "Las puertas se abren al tercer piso y enfrente tienes a un hombre que luce sorprendido al verte con vida y dice 'No deberías confiar en nadie aquí adentro' mientras te entrega una pistola. Las puertas se cierran dejándote sola hasta el siguiente piso y avanzas.";
+                choices.innerHTML = '<button onclick="chooseOption(\'conflictodos\')">Continuar</button>';
+            } else if (option === "juntos") {
+                currentPath = "juntos"; // Establecer el camino actual
+                story.innerText = "Siguen juntos al tercer piso y se encuentran con la otra persona. Empiezan una discusión porque Tatiana te dice que Damian solo te está engañando para sacrificarte y así salvar a Aegan. Pero Damian dice lo mismo de Tatiana, pues ella quería salvar a Aleixandre. ¿En quién confías?";
+                startTimer();
+                // Aquí se inicia el conflicto directamente
+                chooseOption('conflictodos');
+            } else if (option === "conflictodos") {
+                story.innerText = "Al llegar a las escaleras que te llevarán a la azotea, te encuentras con Tatiana y Damian, quienes se acusan mutuamente. Tatiana te dice que Damian solo te está engañando para sacrificarte y así salvar a Aegan. Pero Damian dice lo mismo de Tatiana, pues ella quería salvar a Aleixandre. ¿En quién confías?";
+                startTimer();
+                choices.innerHTML = '<button onclick="chooseOption(\'tatiana\')">Confiar en Tatiana</button>' +
+                                   '<button onclick="chooseOption(\'damian\')">Confiar en Damian</button>';
+            } else if (option === "ningunodos") {
+                story.innerText = "No confiaste en ninguno y decidiste huir. Ellos te siguen y tu única opción es usar la pistola. ¿Disparas?";
+                choices.innerHTML = '<button onclick="chooseOption(\'dispara\')">Les disparas</button>' +
+                                   '<button onclick="chooseOption(\'nodispara\')">Prefieres no usarla</button>';
+            } else if (option === "dispara") {
+                story.innerText = "Logras salir con vida. Felicidades, sobreviviste..";
+            } else if (option === "nodispara") {
+                story.innerText = "Te atrapan y nunca vuelves a abrir los ojos. Fin del juego.";
+            } else if (option === "tatiana") {
+                story.innerText = "Suben las escaleras deprisa con Damian siguiéndolas aún sin rendirse. Al llegar a la azotea, un tercer noveno tenía a los hermanos Cash amarrados. Pero como vio que llegaste junto a Tatiana, mata a Aegan. Damian llega justo para verlo, así que toma venganza y te mata. Fin del juego.";
+            } else if (option === "damian") {
+                story.innerText = "Suben las escaleras deprisa con Tatiana siguiéndolos aún sin rendirse. Al llegar a la azotea, un tercer noveno tenía a los hermanos Cash amarrados. Pero como vio que llegaste junto a Damian, mata a Aleixandre. Tatiana llega justo para verlo, así que toma venganza y te mata. Fin del juego.";
+            } else if (option === "ninguno") {
+                story.innerText = "No confiaste en ninguno y decidiste huir. En tu escape, te encuentras con un hombre misterioso que atraviesa un pasadizo. Él te ofrece ayuda para salir. ¿Confías en él?";
+                choices.innerHTML = '<button onclick="chooseOption(\'confia\')">Confiar en el desconocido</button>' +
+                                   '<button onclick="chooseOption(\'noconfia\')">No confiar en él</button>';
+            } else if (option === "confia") {
+                story.innerText = "Aceptaste su ayuda y lograste salir con vida.Era Adrik Cash asi que te casaste y vivieron felices xd. Felicidades, sobreviviste.";
+            } else if (option === "noconfia") {
+                story.innerText = "Desconfiando, intentaste huir sola, pero Tatiana y Damian te atraparon. Nunca volviste a abrir los ojos. Fin del juego.";
+            }
+        }
+    </script>
+</body>
+</html>

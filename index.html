@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escape Room - Inicio</title>
+    <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+    <!-- Video de fondo -->
+    <video autoplay loop muted id="background-video">
+        <source src="img/bosque.mp4" type="video/mp4">
+        Tu navegador no soporta videos de fondo.
+    </video>
+
+    <!-- Contenido principal -->
+    <div class="container">
+        <h1>Escape Room: La Mansión</h1>
+        <p>Bienvenido al Escape Room.</p>
+        <p>Te encuentras en una mansión misteriosa donde cada decisión puede costarte la vida.</p>
+        <p>Solo recuerda: Eres lo que decides, pero también lo que no.</p>
+        <p>¿Podrás escapar?</p>
+        <button onclick="window.location.href='game.html'">Iniciar el juego</button>
+    </div>
+
+    <script>
+        function createLeaves() {
+            for (let i = 0; i < 5; i++) { // Menos hojas para que no sobrecargue la pantalla
+                let leaf = document.createElement("div");
+                leaf.classList.add("leaf");
+                leaf.style.left = Math.random() * window.innerWidth + "px";
+                leaf.style.animationDuration = (Math.random() * 5 + 5) + "s"; // Velocidad aleatoria
+                document.body.appendChild(leaf);
+
+                setTimeout(() => {
+                    leaf.remove();
+                }, 10000); // Eliminar después de caer
+            }
+        }
+
+        setInterval(createLeaves, 2000); // Generar hojas cada 2 segundos
+    </script>
+</body>
+</html>
